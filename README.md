@@ -1,11 +1,11 @@
-# Welcome to [Slidev](https://github.com/slidevjs/slidev)!
+# 蓝桥杯Web组备赛指南 · 2025年省赛
 
-To start the slide show:
+## 幻灯片
 
-- `pnpm install`
-- `pnpm dev`
-- visit <http://localhost:3030>
+如何运行？
 
-Edit the [slides.md](./slides.md) to see the changes.
-
-Learn more about Slidev at the [documentation](https://sli.dev/).
+```bash
+# 预先安装node、pnpm、just
+pnpm install
+just dev # 后面加上幻灯片的名字（不加后缀名，位于slides文件夹下）
+```
