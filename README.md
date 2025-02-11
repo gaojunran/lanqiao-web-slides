@@ -7,5 +7,6 @@
 ```bash
 # 预先安装node、pnpm、just
 pnpm install
-just dev # 后面加上幻灯片的名字（不加后缀名，位于slides文件夹下）
+just dev guide  # 这将启动slides/guide.md
+just dev another-slide  # 这将启动slides/another-slide.md
 ```
