@@ -1,0 +1,8 @@
+{
+    "slidev.force-enabled": true,
+    "slidev.port": 3030,
+    "slidev.include": [
+        "**/slides.md",
+        "slides/异步编程.md"
+    ]
+}
