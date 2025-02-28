@@ -3,6 +3,8 @@
     "slidev.port": 3030,
     "slidev.include": [
         "**/slides.md",
-        "slides/异步编程.md"
-    ]
+        "slides/异步编程.md",
+        "slides/浏览器API.md"
+    ],
+    "Codegeex.GenerationPreference": "automatic"
 }
