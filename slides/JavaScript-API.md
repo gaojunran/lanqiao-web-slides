@@ -424,4 +424,89 @@ graph LR
 
 
 ---
+ 
+## `RegExp`
+
+<v-clicks>
+
+学习正则表达式：[Geek Hour](https://www.youtube.com/watch?v=uPBtum7QRvw)
+
+```js{hide|1|1-2|1-3|5|5-6|5-7|5-9|5-10|all}
+// `String.search`: 返回第一个匹配项起点的位置，或-1.
+"JavaScript".search(/script/ui)  // => 4
+"Python".search(/script/ui)  // => -1
+
+// `String.replace`: 按正则替换字符串，支持捕获组和命名捕获组。
+let quote = /"([^"]*)"/g  // 一个引号 + 任意多个非引号字符 + 引号
+'He said "stop"'.replace(quote, '<q>$1</q>')  // => 'He said <q>stop</q>'
+
+let quote = /"(?<quote>[^"]*)"/g
+'He said "stop"'.replace(quote, '<q>$<quote></q>')  // => 'He said <q>stop</q>'
+```
+
+`replace`传入函数的高级用法：https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/replace#specifying_a_function_as_the_replacement
+
+
+```js{hide|5|1-4|all}
+function replacer(match, p1, p2, p3, offset, string, groups) {
+  // p1 is non-digits, p2 digits, and p3 non-alphanumerics
+  return [p1, p2, p3].join(" - ");
+}
+const newString = "abc12345#$*%".replace(/([^\d]*)(\d*)([^\w]*)/, replacer);  // abc - 12345 - #$*%
+```
+
+</v-clicks>
+
+---
+
+```js{hide|1|1-2|1-3|1-4|1,6|7-10|all}
+// `String.match`: 返回一个数组，数组中包含所有匹配项（如果有g标识），或第一个匹配项的详细信息（如果无g标识）。
+let nums = "12345678"
+nums.match(/\d/g) // => ["1", "2", "3", "4", "5", "6", "7", "8"]
+nums.match(/\d/) // => ["1", index: 0, input: "12345678", groups: undefined]
+
+// `String.matchAll`：适用于循环遍历所有匹配项，必须带g标识。
+[...nums.matchAll(/\d/g)] // => 0: ['1', index: 0, input: '12345678', groups: undefined]
+                          //    1: ['2', index: 1, input: '12345678', groups: undefined]
+                          //    ...
+                          //    7: ['8', index: 7, input: '12345678', groups: undefined]
+```
+
+<v-clicks>
+
+⚠️ **会被g标志影响的方法**：`String.match()`, `String.replace()`。
+
+⚠️ **不会被g标志影响的方法**：`String.search()`
+
+⚠️ **必须带g标志的方法**：`String.matchAll()`。
+
+::my
+::
+
+`RegExp`的方法：
+
+`test()`: 返回一个布尔值，表示当前模式是否能匹配参数字符串。
+
+`exec()`: 始终返回一个匹配项。每次匹配后会更新搜索起点。
+
+</v-clicks>
+
+---
+
+## `Date`
+
+```js
+let date = new Date()
+date.getFullYear() // => 2025
+date.getMonth() // => 0 (0表示1月)
+date.getDate() // => 1
+date.getDay() // => 0 (0表示星期日)
+date.getTime() // => 1704128000000 (时间戳，毫秒)
+date.setFullYear(2020) // => 1577836800000
+date.setMonth(date.getMonth() + 1) // 可进行计算
+date > new Date(2020, 0, 1) // => true，可进行比较
+```
+
+更多用法：https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date
+
 
