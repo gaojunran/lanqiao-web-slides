@@ -25,7 +25,7 @@ mdc: true
 蓝桥杯Web组 省赛备赛 {.!text-white/50}
 
 ---
-
+ 
 ## JavaScript 学习资源
 
 [MDN](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript)
@@ -282,9 +282,9 @@ Array.from('hello') // ['h', 'e', 'l', 'l', 'o']
 
 使用`push`和`shift`可以模拟队列。
 
-- splice(loc)：删除从索引`loc`开始的所有元素。
-- splice(loc, count)：切出从索引`loc`开始的`count`个元素。
-- splice(loc, count, ...items): 在切出元素的基础上，在`loc`位置插入元素。
+- `splice(loc)`：删除从索引`loc`开始的所有元素。
+- `splice(loc, count)`：切出从索引`loc`开始的`count`个元素。
+- `splice(loc, count, ...items)`: 在切出元素的基础上，在`loc`位置插入元素。
 
 ⚠ 这几个方法都是对数组的**就地操作**，会改变原数组但不会返回原数组。
 
@@ -305,6 +305,8 @@ Array.from('hello') // ['h', 'e', 'l', 'l', 'o']
 
 - `sort(func)`：按照指定规则排序。默认按照字符串字典序排序。
 
+</v-clicks>
+
 ```js{hide|1|2|1-2|3-6|all}
 [1, 2, 3].sort((a, b) => a - b) // [1, 2, 3]
 [1, 2, 3].sort((a, b) => b - a) // [3, 2, 1]
@@ -314,6 +316,8 @@ Array.from('hello') // ['h', 'e', 'l', 'l', 'o']
 ].sort((a, b) => a.grade - b.grade) 
         // [{name: "Alice", grade: 1}, {name: "Bob", grade: 2}]
 ```
+
+<v-clicks>
 
 - `reverse()`：反转数组。
 
@@ -378,11 +382,35 @@ new Array(20)
 
 ---
 
+## `Array`的迭代 🗡
+
+::my
+::
+
+<v-clicks>
+
+- `every(func)`: 对每个元素调用`func`，如果所有`func`都返回`true`，则返回`true`。
+
+- `some(func)`: 对每个元素调用`func`，如果任意一个`func`返回`true`，则返回`true`。
+
+- `find(func)`: 对每个元素调用`func`，返回第一个`func`返回`true`的元素。
+
+- `findIndex(func)`: 对每个元素调用`func`，返回第一个`func`返回`true`的元素的索引。
+
+- 其它数组方法：https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array
+
+</v-clicks>
+
+
+---
+
+<v-clicks>
+
 ## `Set`
 
 与数组不同的是，集合**没有索引或顺序，也不允许重复**：一个值要么是集合的成员，要么不是；不可能存在一个值在一个集合中出现多次。
 
-```js
+```js{hide|1|all}
 let set = new Set([1, 2, 3])
 set.add(4)
 set.delete(2)
@@ -397,7 +425,7 @@ set.size // 2
 
 `Map`对象保存键值对。任何值(对象或者原始值) 都可以作为一个键或一个值。
 
-```js
+```js{hide|1|1-3|all}
 let map = new Map()
 map.set('name', 'Alice')
 map.set('age', 20)
@@ -407,19 +435,31 @@ map.delete('age')
 map.size // 1
 ```
 
+</v-clicks>
+
 ---
 
-## 数组、集合和映射之间的转换
+## `Array`, `Set`, `Map`, `Object`之间的转换
 
 ::my
 ::
 
 ```mermaid
 graph LR
-    A[Array] -->|"new Set(array)"| B[Set]
-    B -->|"[...set]"| A
-    C[Map] -->|"new Map(array.map(...))"| A
-    A -->|"[...map.values()]"| C
+    A[Array]
+    C[Array with entries]
+    D[Object]
+    E[Set]
+    F[Map]
+
+    D --> |Object.keys/values| A
+    D --> |Object.entries| C
+    C --> |new Map| F
+    F --> |Array.from| C
+    F --> |Object.fromEntries| D
+    C --> |Object.fromEntries| D
+    A --> |new Set| E
+    E --> |Array.from| A
 ```
 
 
@@ -495,7 +535,7 @@ nums.match(/\d/) // => ["1", index: 0, input: "12345678", groups: undefined]
 
 ## `Date`
 
-```js
+```js{1|2-5|6|7|8|9|all}
 let date = new Date()
 date.getFullYear() // => 2025
 date.getMonth() // => 0 (0表示1月)
