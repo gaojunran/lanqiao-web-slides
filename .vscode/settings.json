@@ -6,7 +6,8 @@
         "slides/异步编程.md",
         "slides/浏览器API.md",
         "slides/浏览器API与Vue3.md",
-        "slides/Vue3.md"
+        "slides/Vue3.md",
+        "slides/JavaScript-API.md"
     ],
     "Codegeex.GenerationPreference": "automatic"
 }
