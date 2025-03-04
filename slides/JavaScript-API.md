@@ -455,7 +455,8 @@ graph LR
     D --> |Object.keys/values| A
     D --> |Object.entries| C
     C --> |new Map| F
-    F --> |Array.from| C
+    F --> |"Array.from"| C
+    F --> |"[...map.keys/values]"| A
     F --> |Object.fromEntries| D
     C --> |Object.fromEntries| D
     A --> |new Set| E

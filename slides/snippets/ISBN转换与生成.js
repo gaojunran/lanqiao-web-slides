@@ -45,10 +45,12 @@ function validISBN10(str) {
   // 入参 str 为待判断的只有纯数字和大写 X 字母的字符串
 
 function validISBN102(str) {
-    // TODO: 待补充代码
     const match = /^(\d{9})([\d|X])$/.exec(str);
     if (!match) return false;
-    const checkNum = (eval(match[1].split("").map((v, i) => `${i + 1}*${v}`).join("+"))) % 11
+    // 用加号拼成JavaScript表达式再eval；match[1]是第一个匹配结果
+    let evaled = [...match[1]].map((cur, idx) => `${idx + 1}*${cur}`)
+                              .join("+");
+    const checkNum = eval(evaled) % 11;
     return match[2] === (checkNum === 10 ? "X" : checkNum.toString())
 }
 
