@@ -282,8 +282,8 @@ Array.from('hello') // ['h', 'e', 'l', 'l', 'o']
 
 使用`push`和`shift`可以模拟队列。
 
-- `splice(loc)`：删除从索引`loc`开始的所有元素。
-- `splice(loc, count)`：切出从索引`loc`开始的`count`个元素。
+- `splice(loc)`：删除从索引`loc`开始的所有元素，返回被删除的元素数组。
+- `splice(loc, count)`：切出从索引`loc`开始的`count`个元素，返回被删除的元素数组。
 - `splice(loc, count, ...items)`: 在切出元素的基础上，在`loc`位置插入元素。
 
 ⚠ 这几个方法都是对数组的**就地操作**，会改变原数组但不会返回原数组。
