@@ -25,6 +25,7 @@ mdc: true
 蓝桥杯Web组 省赛备赛 {.!text-white/50}
 
 ---
+
  
 ## JavaScript 学习资源
 
@@ -53,6 +54,7 @@ mdc: true
 </v-clicks>
 
 ---
+
   
 ## `Number`
 
@@ -86,6 +88,7 @@ Number.isSafeInteger(x)
 </v-clicks>
 
 ---
+
    
 ## `String`
 
@@ -358,22 +361,22 @@ new Array(20)
 
 ```js
 // 生成一个1~20的列表
-new Array(20)
+new Array(20).fill(0)
     .map((_, idx) => idx + 1)
 ```
 
 ```js
 // 生成一个1~20的列表，筛选出其中的奇数
-new Array(20)
+new Array(20).fill(0)
     .map((_, idx) => idx + 1)
-    .filter(x => x % 2)
+    .filter(x => x % 2 != 0)
 ```
 
 ```js
 // 生成一个1~20的列表，筛选出其中的奇数，然后求和
-new Array(20)
+new Array(20).fill(0)
     .map((_, idx) => idx + 1)
-    .filter(x => x % 2)
+    .filter(x => x % 2 != 0)
     .reduce((a, b) => a + b, 0)
 ```
 ````
@@ -465,6 +468,7 @@ graph LR
 
 
 ---
+
  
 ## `RegExp`
 
@@ -549,5 +553,3 @@ date > new Date(2020, 0, 1) // => true，可进行比较
 ```
 
 更多用法：https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date
-
-
