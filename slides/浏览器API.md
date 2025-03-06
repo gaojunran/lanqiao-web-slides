@@ -137,7 +137,7 @@ img ~ p.caption  // 兄弟
 
 **`Element`对象**上的方法：
 
-- `parentNode`
+- `parentElement`
 - `children`
 - `firstElementChild`
 - `lastElementChild`

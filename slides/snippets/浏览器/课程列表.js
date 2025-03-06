@@ -45,7 +45,7 @@ prev.onclick = function () {
   }
   pageNum--;
   container.innerHTML = ""
-  data.slice((pageNum - 1) * 5, (pageNum - 1) * 5 + 5).forEach(show)
+  data.slice((pageNum - 1) * 5, (pageNum) * 5).forEach(show)
   pageNum == 1 ? prev.classList.add("disabled") : prev.classList.remove("disabled")
   pageNum == maxPage ? next.classList.add("disabled") : next.classList.remove("disabled")
   // TODO：待补充代码
@@ -59,7 +59,7 @@ next.onclick = function () {
   }
   pageNum++;
   container.innerHTML = ""
-  data.slice((pageNum - 1) * 5, (pageNum - 1) * 5 + 5).forEach(show)
+  data.slice((pageNum - 1) * 5, (pageNum) * 5).forEach(show)
   pageNum == 1 ? prev.classList.add("disabled") : prev.classList.remove("disabled")
   pageNum == maxPage ? next.classList.add("disabled") : next.classList.remove("disabled")
 };
