@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>个性化桌面</title>
+  <link rel="stylesheet/less" type="text/css" href="./css/style.less" />
+  <link rel="stylesheet" href="./lib/element-plus/index.css" />
+  <script src="./lib/vue.min.js"></script>
+  <script src="./lib/vueDemi.js"></script>
+  <script src="./lib/pinia.min.js"></script>
+  <script src="./lib/less.module.js"></script>
+  <script src="./lib/element-plus/index.full.js"></script>
+  <script src="./store/index.js"></script>
+</head>
+
+<body>
+  <div id="app">
+    <div class="container" :style="file.containerStyle">
+      <div class="header">
+        <div class="right">
+          <el-popover placement="bottom" title="背景设置" :width="680" trigger="click">
+            <template #reference>
+              <img src="./images/设置.svg" alt="" />
+            </template>
+            <div class="bgc-list">
+              <!-- TODO1：待补充代码 渲染img列表 -->
+              <template v-for="pic in file.bgcList" :key="pic.key">
+                <img :src="pic.url" @click="file.changeBgc(pic.url)" />
+              </template>
+            </div>
+          </el-popover>
+
+          <img src="./images/电池电量.svg" alt="" />
+          <img src="./images/wifi (2).svg" alt="" />
+          <img src="./images/蓝牙 (2).svg" style="width: 22px; height: 22px" alt="" />
+          <img src="./images/声音.svg" alt="" />
+          <img src="./images/全屏.svg" style="width: 20px; height: 20px" @click="open" />
+          <img src="./images/个人头像.svg" alt="" />
+        </div>
+      </div>
+      <div class="content" @contextmenu.prevent="handleRightClick">
+        <div class="file-list">
+          <div class="file" @drop="handleDrop" @dragover.prevent="allowDrop" draggable="true">
+            <img src="./images/删除 (1).svg" style="color: #fff" />
+            <p>垃圾桶</p>
+          </div>
+          <template v-for="(item,index) in file.fileList">
+            <el-popover placement="right-start" :width="200" trigger="click">
+              <template #reference>
+                <div class="file" @dragstart="dragStart($event, item , index)" @dragend="dragEnd($event)"
+                  draggable="true">
+                  <img src="./images/文件-文件-1 (1).svg" alt="" />
+                  <div>
+                    <template v-if="item.isEditing">
+                      <input v-model="item.name" @blur="file.saveEdit(item,index)"
+                        @keyup.enter="file.saveEdit(item,index)" :autofocus="true" style="
+                            width: 100%;
+                            max-height: 100px;
+                            box-sizing: border-box;
+                          " />
+                    </template>
+                  </div>
+                  <template v-if="!item.isEditing">
+                    <p>{{ item.name }}</p>
+                  </template>
+                </div>
+              </template>
+              <div class="option">
+                <div class="item open" @click="file.openFile(item,index)">
+                  <p>Open</p>
+                </div>
+                <el-divider></el-divider>
+                <div class="item">
+                  <p>Download</p>
+                </div>
+                <div class="item">
+                  <p>Zip</p>
+                </div>
+                <el-divider></el-divider>
+                <div class="item">
+                  <p>Cut</p>
+                </div>
+                <div class="item">
+                  <p>Copy</p>
+                </div>
+                <div class="item" @click="file.renameFile(index)">
+                  <p>Rename</p>
+                </div>
+              </div>
+            </el-popover>
+          </template>
+        </div>
+      </div>
+      <div class="footer">
+        <div class="app-list">
+          <img src="./images/icon-twitter (1).svg" alt="" />
+          <img src="./images/discord.svg" alt="" />
+          <img src="./images/dribbble.svg" alt="" />
+          <img src="./images/facebook.svg" alt="" />
+          <img src="./images/figma.svg" alt="" />
+          <img src="./images/google.svg" alt="" />
+          <img src="./images/icon-pinterest.svg" alt="" />
+          <img src="./images/linkedin.svg" alt="" />
+          <img src="./images/youtube.svg" alt="" />
+          <img src="./images/whatsapp.svg" alt="" />
+          <img src="./images/vimeo.svg" alt="" />
+          <img src="./images/twitch.svg" alt="" />
+          <img src="./images/tiktok.svg" alt="" />
+        </div>
+      </div>
+    </div>
+    <div>
+      <el-dialog v-model="file.editorVisible" width="700" :before-close="dialogCloseCal">
+        <div class="title">
+          <div class="name">
+            <img src="./images/note.svg" alt="" />
+            <p>{{ file.changeFile.name }}</p>
+          </div>
+          <div class="close" @click="file.closeEditorBtn">
+            <img src="./images/close.svg" alt="" />
+          </div>
+        </div>
+        <div class="content-edit">
+          <p>File</p>
+          <p>Edit</p>
+          <p>Tools</p>
+          <p>Format</p>
+          <p>View</p>
+          <p>Help</p>
+        </div>
+        <div class="content-heart">
+          <textarea name="content" v-model="file.changeFileText"></textarea>
+        </div>
+        <template #footer>
+          <div class="dialog-footer">
+            <div class="text-num">Column：{{file.changeFileText.length}}</div>
+          </div>
+        </template>
+      </el-dialog>
+    </div>
+
+    <el-dialog v-model="file.isSaveVisible" width="400" style="background-color: #e6e9f3" class="save-dialog"
+      :before-close="dialogCloseCal">
+      <div class="content">
+        <img src="./images/warning.svg" alt="" />
+        <p>Do you want to save changes you made?</p>
+        <el-button type="primary" class="save" @click="file.saveText">Save</el-button>
+        <el-button type="default" class="notsave" @click="file.notSaveText">Don't Save</el-button>
+        <el-button type="default" @click="file.notSaveText">Cancel</el-button>
+      </div>
+    </el-dialog>
+  </div>
+</body>
+
+<script type="module">
+  const { createApp, ref } = Vue;
+  const { createPinia } = Pinia;
+  const { ElButton, ElMessage, ElCard, ElDivider } = ElementPlus;
+
+  const app = createApp({
+    setup() {
+      const file = useFileStore();
+
+      //TODO4 START：待补充代码
+      let draggedIdx = -1;
+      //被拖拽文件
+      const dragStart = (event, item, index) => {
+        draggedIdx = index;
+      };
+
+      //拖拽结束后的回调函数
+      const handleDrop = (event) => {
+        event.preventDefault()
+        draggedIdx != -1 && file.fileList.splice(draggedIdx, 1)
+        localStorage.setItem("fileList", JSON.stringify(file.fileList));
+      };
+
+      //TODO4 END
+
+      const open = () => {
+        if (!document.fullscreenElement) {
+          if (document.documentElement.requestFullscreen) {
+            document.documentElement.requestFullscreen();
+          } else if (document.documentElement.mozRequestFullScreen) {
+            // Firefox
+            document.documentElement.mozRequestFullScreen();
+          } else if (document.documentElement.webkitRequestFullscreen) {
+            // Chrome, Safari and Opera
+            document.documentElement.webkitRequestFullscreen();
+          } else if (document.documentElement.msRequestFullscreen) {
+            // IE/Edge
+            document.documentElement.msRequestFullscreen();
+          }
+        } else {
+          if (document.exitFullscreen) {
+            document.exitFullscreen();
+          } else if (document.mozCancelFullScreen) {
+            // Firefox
+            document.mozCancelFullScreen();
+          } else if (document.webkitExitFullscreen) {
+            // Chrome, Safari and Opera
+            document.webkitExitFullscreen();
+          } else if (document.msExitFullscreen) {
+            // IE/Edge
+            document.msExitFullscreen();
+          }
+        }
+      };
+
+      let selectContainer = null;
+
+      const handleRightClick = (event) => {
+        event.preventDefault(); // 阻止默认的右键菜单
+
+        // 获取鼠标位置
+        const x = event.clientX;
+        const y = event.clientY;
+
+        // 如果已有按钮容器，则先移除
+        if (selectContainer) {
+          selectContainer.remove();
+        }
+
+        // 创建一个 div 容器来放置 card
+        selectContainer = document.createElement("div");
+        selectContainer.classList.add("context-menu-container");
+        selectContainer.style.position = "absolute";
+        selectContainer.style.left = `${x}px`;
+        selectContainer.style.top = `${y}px`;
+        selectContainer.style.zIndex = "999";
+
+        // 将 div 添加到 body 中
+        document.body.appendChild(selectContainer);
+        createApp({
+          components: { ElCard, ElDivider },
+          template: `<el-card class="alert">
+                        <div class="item sortby">
+                            <p>Sort by</p>
+                            <div class="left">&gt;</div>
+                        </div>
+                        <div class="item">
+                            <p>Refresh</p>
+                        </div>
+                        <div class="item">
+                            <p>Show hidden</p>
+                        </div>
+                        <el-divider></el-divider>
+                        <div class="item newAdd">
+                            <p>New</p>
+                            <div class="left">&gt;</div>
+                        </div>
+                        <el-divider></el-divider>
+                        <div class="item">
+                            <p>paste</p>
+                        </div>
+                        <div class="item">
+                            <p>Undo</p>
+                        </div>
+                        <div class="item">
+                            <p>Upload here</p>
+                        </div>
+                        <div class="new-card">
+                            <el-card>
+                                <div class="item2">
+                                    <img src="./images/dir.svg" alt="">
+                                    <p>new folder</p>
+                                </div>
+                                <el-divider></el-divider>
+                                <div class="item2 newFile" @click="newFile">
+                                    <img src="./images/file.svg" alt="">
+                                    <p>text document</p>
+                                </div>
+                            </el-card>
+                        </div>
+                         <div class="new-card2">
+                            <el-card>
+                                <div class="item2 sizeSort" @click="sizeSort">
+                                    <p>Size</p>
+                                </div>
+                                <el-divider></el-divider>
+                                <div class="item2 dateSort" @click="dateSort">
+                                    <p>Date</p>
+                                </div>
+                            </el-card>
+                        </div>
+                    </el-card>`,
+          methods: {
+            newFile() {
+              //创建一个新文件
+              file.addFile();
+            },
+            sizeSort() {
+              file.sizeSort();
+            },
+
+            dateSort() {
+              file.dateSort();
+            },
+          },
+        }).mount(selectContainer);
+
+        // 添加事件监听器以移除容器
+        document.addEventListener("click", handleClickOutside);
+      };
+
+      //拖拽文件的默认回调函数
+      const allowDrop = (event) => {
+        event.preventDefault();
+      };
+      //拖拽结束
+      const dragEnd = (event) => {
+      };
+      const handleClickOutside = (event) => {
+        if (selectContainer && !selectContainer.contains(event.target)) {
+          // 延迟移除容器， 提升用户体验
+          setTimeout(() => {
+            if (!selectContainer.contains(event.target)) {
+              selectContainer.remove();
+              selectContainer = null;
+            }
+          }, 300);
+          document.removeEventListener("click", handleClickOutside);
+        }
+      };
+
+      const dialogCloseCal = (done) => { };
+
+      return {
+        open,
+        file,
+        handleRightClick,
+        dialogCloseCal,
+        handleDrop,
+        allowDrop,
+        dragStart,
+        dragEnd,
+      };
+    },
+  });
+  const pinia = createPinia();
+  app.use(pinia);
+  app.use(ElementPlus);
+  app.mount("#app");
+  window.$pinia = pinia;
+</script>
+
+</html>
