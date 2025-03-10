@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>小蓝驿站</title>
+    <!-- 链接外部样式表 -->
+    <link rel="stylesheet" href="css/style.css">
+    <!-- 引入 Vue.js 框架 -->
+    <script src="lib/vue.global.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <!-- 邮箱顶部标题和操作按钮 -->
+        <div class="email-header">
+            <!-- 邮箱标题 -->
+            <div class="email-header-logo">
+                <h1 class="email-header-title">小蓝驿站</h1>
+            </div>
+            <!-- 邮箱操作按钮，包括撰写邮件、设置和退出 -->
+            <div class="email-header-actions">
+                <button class="email-header-button">撰写邮件</button>
+                <button class="email-header-button">设置</button>
+                <button class="email-header-button">退出</button>
+            </div>
+        </div>
+
+        <div class="container">
+            <!-- 邮箱侧边栏 -->
+            <div class="email-sidebar">
+                <!-- 邮箱文件夹列表 -->
+                <ul class="folder-list">
+                    <li class="folder-list-item">收件箱</li>
+                    <li class="folder-list-item">草稿箱</li>
+                    <li class="folder-list-item">已发送</li>
+                    <li class="folder-list-item">已删除</li>
+                    <li class="folder-list-item">垃圾邮件</li>
+                    <li class="folder-list-item">广告邮件</li>
+                </ul>
+            </div>
+            <div>
+                <!-- 通讯录标题 -->
+                <div class="contacts-title">通讯录</div>
+                <!-- 添加联系人区块 -->
+                <div class="add-contacts">
+                    <!-- 添加联系人标题 -->
+                    <div class="contacts-group-title">添加联系人</div>
+                    <!-- 添加联系人表单 -->
+                    <div class="add-contact">
+                        <!-- 联系人输入框，使用 Vue 的 v-model 进行双向数据绑定 -->
+                        <input class="add-contact-input" v-model="newContact" placeholder="新联系人名字">
+                        <!-- 添加按钮，点击后触发 addContact 方法 -->
+                        <button class="add-contact-button" @click="addContact">添加</button>
+                    </div>
+                </div>
+                <!-- 联系人列表 -->
+                <ul class="contacts-list">
+                    <!-- TODO：待补充代码 目标 1  -->
+                    <li class="contacts-group" v-for="(item) in contacts">   
+                        <div class="contacts-group-title">{{item.letter}}</div>  
+                        <ul v-for="(ele) in item.contacts">
+                          <li class="contact-item"> 
+                            <span class="contact-name">{{ele.name}}</span
+                            ><button class="del-contact-button">删除</button>
+                          </li>
+                          
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 从 Vue 对象中解构出 reactive、computed 和 ref 等方法
+        const { reactive, computed, ref,onMounted } = Vue;
+        // 定义 Vue 应用
+        const app = {
+            setup() {
+                // 定义并初始化联系人列表
+                let contacts = ref([]);
+                onMounted(async () => {
+                    const res = await fetch('./data.json').then(res => res.json()).then(data => data);
+                    contacts.value  = res;;
+                });
+                
+                // 定义并初始化新联系人名字
+                const newContact = ref("");
+
+                // 定义计算属性，对联系人列表进行排序
+                const sortedContacts = computed(() => {
+                    return contacts.value.sort((a, b) => a.letter.localeCompare(b.letter));
+                });
+                // 定义添加联系人的方法
+                const addContact = () => {
+                    // TODO：待补充代码 目标 2 
+                    // 方法一：by index
+                    let idx = contacts.value.findIndex(item => item.letter == newContact.value[0].toUpperCase())
+                    if (idx == -1) {
+                        contacts.value.push({
+                            letter: newContact.value[0].toUpperCase(),
+                            contacts: [{ name: newContact.value }]
+                        })
+                    } else {
+                        contacts.value[idx].contacts.push({
+                            name: newContact.value
+                        })
+                    }
+                    // 方法二：by item
+                    // let group = contacts.value.find(item => item.letter == newContact.value[0].toUpperCase())
+                    // if (group) {
+                    //     // ...
+                    // } else {
+                    //     // ...
+                    // }
+                    // TODO：END
+                    // 添加完成清空联系人输入框
+                    newContact.value = "";
+                };
+                
+                // 返回应用所需的数据和方法
+                return {
+                    contacts,
+                    newContact,
+                    sortedContacts,
+                    addContact
+                };
+            }
+        };
+
+        // 创建并挂载 Vue 应用
+        Vue.createApp(app).mount("#app");
+    </script>
+</body>
+
+</html>

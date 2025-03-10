@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Github 明星项目统计</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+  <link rel="stylesheet" type="text/css" href="css/style.css" />
+  <script src="./lib/axios.js"></script>
+  <script src="lib/vue.global.js"></script>
+  <script src="lib/echarts.min.js"></script>
+
+<body>
+  <div id="app">
+    <!-- 图表容器 -->
+    <div id="chart" style="width: 100%; height: 500px;"></div>
+    <div class="filters">
+      <div>
+        筛选语言
+        <!-- TODO: 待补充代码 -->
+        <select name="language" id="language" @change="changeHandle" v-model="language">
+          <!-- <option value="All">All</option> -->
+          <option v-for="lang in languages" :value="lang">{{ lang }}</option>
+        </select>
+      </div>
+      <div>展示第<input id="first" type="text" v-model="pageStart" @input="changeHandle">到第<input id="second" type="text"
+        v-model="pageEnd" @input="changeHandle">位的项目</div>
+    </div>
+  </div>
+</body>
+
+<script>
+  var xData;
+  var yData;
+  const app = Vue.createApp({
+    setup() {
+      // 定义响应式数据
+      const chart = Vue.ref(null);
+      const chartOptions = Vue.ref(null);
+      const chartData = Vue.ref(null);
+      xData = Vue.ref(null);
+      yData = Vue.ref(null);
+      const languages = Vue.ref(['All', 'JavaScript', 'TypeScript', 'Python', 'Shell', 'C++', 'C#', 'Go', 'Rust', 'Java']);
+      const language = Vue.ref('All');
+      const pageStart = Vue.ref(1);
+      const pageEnd = Vue.ref(100);
+      // 语言筛选改变时或页面数字输入框数字改变时的处理函数
+      const changeHandle = () => {
+        // TODO：待补充代码
+        // 这块可以照着onMounted钩子里的内容抄
+        let newData = chartData.value
+                        // .filter(item => language.value == "All" ? true : item.language == language.value)
+                        .filter(item => language.value == "All" || item.language == language.value)
+        // 整道题就这一行完整的是自己写的
+                        .slice(pageStart.value - 1, pageEnd.value);
+        xData.value = newData.map(item => item.name);
+        yData.value = newData.map(item => item.stars);
+        initChart();
+      };
+
+      // 初始化图表
+      const initChart = () => {
+        chart.value = echarts.init(document.getElementById('chart'));
+        chartOptions.value = {
+          title: {
+            text: 'Github 明星项目统计',
+            x: 'center'
+          },
+          tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+              type: 'shadow',
+              label: {
+                show: true
+              }
+            }
+          },
+          xAxis: {
+            data: xData.value,
+          },
+          yAxis: {
+            type: 'value',
+            label: 'star数量'
+          },
+          series: [
+            {
+              data: yData.value,
+              type: 'bar',
+            }
+          ],
+        };
+        chart.value.setOption(chartOptions.value);
+      };
+
+      // 组件挂载时获取数据
+      Vue.onMounted(() => {
+        axios.get('./js/data.json').then(res => {
+          chartData.value = res.data;
+          let newData = chartData.value.slice(pageStart.value - 1, pageEnd.value);
+          // 注意：这块原代码写错了
+          xData.value = newData.map(item => item.name);
+          yData.value = newData.map(item => item.stars);
+          initChart();
+        });
+      });
+
+      return {
+        chart,
+        chartOptions,
+        chartData,
+        xData,
+        yData,
+        languages,
+        language,
+        pageStart,
+        pageEnd,
+        initChart,
+        changeHandle,
+      };
+    },
+  });
+
+  var vm = app.mount('#app');
+</script>
+
+</html>
