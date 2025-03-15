@@ -10,7 +10,7 @@ importers:
     dependencies:
       '@slidev/cli':
         specifier: ^51.1.0
-        version: 51.1.0(@babel/parser@7.26.8)(@nuxt/kit@3.15.4)(@types/markdown-it@14.1.2)(@types/node@18.19.75)(@vue/compiler-sfc@3.5.13)(markdown-it-async@2.0.0)(postcss@8.5.1)(rollup@4.34.6)(tsx@4.19.2)
+        version: 51.1.0(@babel/parser@7.26.8)(@nuxt/kit@3.15.4)(@types/markdown-it@14.1.2)(@types/node@18.19.75)(@vue/compiler-sfc@3.5.13)(markdown-it-async@2.0.0)(playwright-chromium@1.51.0)(postcss@8.5.1)(rollup@4.34.6)(tsx@4.19.2)
       '@slidev/theme-default':
         specifier: latest
         version: 0.25.0
@@ -23,6 +23,10 @@ importers:
       vue:
         specifier: ^3.5.13
         version: 3.5.13(typescript@5.7.3)
+    devDependencies:
+      playwright-chromium:
+        specifier: ^1.51.0
+        version: 1.51.0
 
 packages:
 
@@ -2318,6 +2322,16 @@ packages:
   plantuml-encoder@1.4.0:
     resolution: {integrity: sha512-sxMwpDw/ySY1WB2CE3+IdMuEcWibJ72DDOsXLkSmEaSzwEUaYBT6DWgOfBiHGCux4q433X6+OEFWjlVqp7gL6g==}
 
+  playwright-chromium@1.51.0:
+    resolution: {integrity: sha512-vvTfgpnpy/OHzszS6jtRxvltC0J3x2Eko925FciIC0IN3KC1fg76veqV9AVWIasR+JTq9ZQh9V5Yqz8DPl38Lg==}
+    engines: {node: '>=18'}
+    hasBin: true
+
+  playwright-core@1.51.0:
+    resolution: {integrity: sha512-x47yPE3Zwhlil7wlNU/iktF7t2r/URR3VLbH6EknJd/04Qc/PSJ0EY3CMXipmglLG+zyRxW6HNo2EGbKLHPWMg==}
+    engines: {node: '>=18'}
+    hasBin: true
+
   points-on-curve@0.2.0:
     resolution: {integrity: sha512-0mYKnYYe9ZcqMCWhUjItv/oHjvgEsfKvnUTg8sAtnHr3GVy7rGkXCb6d5cSyqrWqL4k81b9CPg3urd+T7aop3A==}
 
@@ -3575,7 +3589,7 @@ snapshots:
   '@sindresorhus/merge-streams@2.3.0':
     optional: true
 
-  '@slidev/cli@51.1.0(@babel/parser@7.26.8)(@nuxt/kit@3.15.4)(@types/markdown-it@14.1.2)(@types/node@18.19.75)(@vue/compiler-sfc@3.5.13)(markdown-it-async@2.0.0)(postcss@8.5.1)(rollup@4.34.6)(tsx@4.19.2)':
+  '@slidev/cli@51.1.0(@babel/parser@7.26.8)(@nuxt/kit@3.15.4)(@types/markdown-it@14.1.2)(@types/node@18.19.75)(@vue/compiler-sfc@3.5.13)(markdown-it-async@2.0.0)(playwright-chromium@1.51.0)(postcss@8.5.1)(rollup@4.34.6)(tsx@4.19.2)':
     dependencies:
       '@antfu/ni': 23.3.1
       '@antfu/utils': 8.1.0
@@ -3647,6 +3661,8 @@ snapshots:
       vue: 3.5.13(typescript@5.7.3)
       yaml: 2.7.0
       yargs: 17.7.2
+    optionalDependencies:
+      playwright-chromium: 1.51.0
     transitivePeerDependencies:
       - '@babel/parser'
       - '@nuxt/kit'
@@ -5744,6 +5760,12 @@ snapshots:
       pathe: 2.0.2
 
   plantuml-encoder@1.4.0: {}
+
+  playwright-chromium@1.51.0:
+    dependencies:
+      playwright-core: 1.51.0
+
+  playwright-core@1.51.0: {}
 
   points-on-curve@0.2.0: {}
 

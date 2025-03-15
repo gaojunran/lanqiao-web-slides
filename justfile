@@ -1,6 +1,10 @@
-# 运行just dev + 幻灯片名字，以启动对应的Web演示。
+# 启动对应的Web演示。
 dev name:
     pnpm run dev slides/{{ name }}.md
+
+# 需npm i -D playwright-chromium，导出为PDF。
+export name:
+    pnpm run export slides/{{ name }}.md
 
 # 需安装fzf并在unix环境下：
 pick:
