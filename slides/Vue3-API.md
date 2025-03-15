@@ -20,7 +20,7 @@ mdc: true
 
 ---
 
-# Vue3 { .!text-yellow-100}
+# Vue3 API { .!text-yellow-100}
 
 蓝桥杯Web组 省赛备赛 {.!text-white/50}
 
