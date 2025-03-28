@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="./lib/vue.global.js"></script>
+    <link rel="stylesheet" href="./css/style.css" />
+    <title>需求管理</title>
+  </head>
+  <body>
+    <div id="app" v-cloak>
+      <header>
+        <stats :items="items"></stats>
+        <filter-group @change="filterList" ></filter-group>
+      </header>
+      <!-- TODO：待修改代码 目标 1  -->
+      <demand-list
+        :items="items"
+        @update-child="updateChild"
+        @update-parent="updateParent"
+        @toggle-item="toggleItem"
+      ></demand-list>
+    </div>
+    <script src="./components/DemandList.js"></script>
+    <script src="./components/FilterGroup.js"></script>
+    <script src="./components/Stats.js"></script>
+    <script>
+      const { createApp, ref, computed, onMounted, watch } = Vue;
+      let app = createApp({
+        setup() {
+          const MockUrl = `./mock/data.json`
+          const items = ref([]);
+          let backup = []
+          onMounted(async () => {
+            // TODO：待修改代码目标 1
+            const res = await fetch(MockUrl)
+            items.value = await res.json()
+            backup = items.value
+          });
+          
+       
+          // TODO：待补充代码 目标 4 
+          const filterList = (types) => {
+            items.value = backup.filter(it => types.includes(it.type))
+          }
+
+          // TODO：END
+
+          const toggleItem = (item) => {
+            item.expanded = !item.expanded;
+          };
+
+          // 目标 2 点击完成的逻辑
+          // 点击子项目
+          const updateChild = (parent) => {
+             // TODO：待补充代码 目标 2 
+             if (parent.children.every(child => child.completed)) {
+              parent.completed = true;
+             } else {
+              parent.completed = false;
+             }
+          };
+          // 点击父项目
+          const updateParent = (item) => {
+             // TODO：待补充代码 目标 2 
+             if (item.completed) {
+              item.children.forEach(child => {
+                child.completed = true;
+              })
+             }
+          };
+          // 目标 2 END
+       
+          return {
+            // 一定不要忘了返回items
+            items,
+            filterList,
+            toggleItem,
+            updateChild,
+            updateParent,
+          };
+        },
+      });
+      app.component("demand-list", DemandList);
+      app.component("filter-group", FilterGroup);
+      app.component("stats", Stats);
+      let vm = app.mount("#app");
+    </script>
+  </body>
+</html>
