@@ -1,9 +1,9 @@
 const fs = require('fs');
 const path = require('path');
 
-function generateTreeDFSWithStack(rootDir) {
+function generateTreeBFS(rootDir) {
   const stack = [{ dirPath: rootDir, node: { name: path.basename(rootDir), children: [] } }];
-  const rootNode = stack[0].node;
+  const rootNode = queue[0].node;
 
   while (stack.length > 0) {
     const { dirPath, node } = stack.pop();
@@ -26,4 +26,4 @@ function generateTreeDFSWithStack(rootDir) {
 }
 
 // 示例
-console.log(JSON.stringify(generateTreeDFSWithStack('./testDir'), null, 2));
+console.log(JSON.stringify(generateTreeBFS(__dirname), null, 2));

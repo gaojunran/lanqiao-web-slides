@@ -1,3 +1,6 @@
+const fs = require('fs');
+const path = require('path');
+
 function generateTreeBFS(rootDir) {
   const queue = [{ dirPath: rootDir, node: { name: path.basename(rootDir), children: [] } }];
   const rootNode = queue[0].node;
@@ -23,4 +26,4 @@ function generateTreeBFS(rootDir) {
 }
 
 // 示例
-console.log(JSON.stringify(generateTreeBFS('./testDir'), null, 2));
+console.log(JSON.stringify(generateTreeBFS(__dirname), null, 2));
