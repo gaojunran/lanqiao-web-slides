@@ -24,7 +24,7 @@ window.onload = async ()=> {
     return [...new Map(defaultData.map((it) => {
       let date = it.viewed_on.split("T")[0]
       return [it.id + date, it]
-    }), []).values()]
+    })).values()]
   }
 
   // 转成Object
